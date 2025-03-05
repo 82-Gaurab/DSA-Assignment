@@ -11,6 +11,88 @@ import java.util.concurrent.*;
 
 public class Q6b {
 
+    /*
+     * You need to crawl a large number of web pages to gather data or index
+     * content. Crawling each page
+     * sequentially can be time-consuming and inefficient.
+     * Goal:
+     * Create a web crawler application that can crawl multiple web pages
+     * concurrently using multithreading to
+     * improve performance.
+     * Tasks:
+     * Design the application:
+     * Create a data structure to store the URLs to be crawled.
+     * Implement a mechanism to fetch web pages asynchronously.
+     * Design a data storage mechanism to save the crawled data.
+     * Create a thread pool:
+     * Use the ExecutorService class to create a thread pool for managing multiple
+     * threads.
+     * Submit tasks:
+     * For each URL to be crawled, create a task (e.g., a Runnable or Callable
+     * object) that fetches the web page
+     * and processes the content.
+     * Submit these tasks to the thread pool for execution.
+     * Handle responses:
+     * Process the fetched web pages, extracting relevant data or indexing the
+     * content.
+     * Handle errors or exceptions that may occur during the crawling process.
+     * Manage the crawling queue:
+     * Implement a mechanism to manage the queue of URLs to be crawled, such as a
+     * priority queue or a
+     * breadth-first search algorithm.
+     */
+
+    /*
+     * You need to crawl a large number of web pages to gather data or index
+     * content.
+     * Crawling each page sequentially can be time-consuming and inefficient.
+     * 
+     * Goal:
+     * Create a web crawler application that can crawl multiple web pages
+     * concurrently using multithreading to
+     * improve performance.
+     * 
+     * Tasks:
+     * 
+     * 1. **Design the Application**:
+     * - Use a queue to store the URLs to be crawled.
+     * - Implement asynchronous fetching of web pages.
+     * - Design a data structure to store crawled data.
+     * 
+     * 2. **Thread Pool Management**:
+     * - Use `ExecutorService` to manage multiple threads efficiently.
+     * - Limit thread pool size (e.g., 5 threads) to balance performance.
+     * 
+     * 3. **Crawling Process**:
+     * - Fetch web pages concurrently using HTTP requests.
+     * - Extract relevant data (e.g., page title).
+     * - Store extracted data and update the UI.
+     * 
+     * 4. **User Interface (UI) Features**:
+     * - Input field to enter URLs.
+     * - Buttons to start, pause, resume, and stop crawling.
+     * - Output area to display results.
+     * - Progress bar to visualize the crawling progress.
+     * 
+     * 5. **Concurrency & Synchronization**:
+     * - Use synchronized data structures to avoid race conditions.
+     * - Use `SwingUtilities.invokeLater()` to update UI safely from worker threads.
+     * 
+     * 6. **Handling Pause, Resume, and Stop**:
+     * - `isPaused`: Pauses crawling without stopping threads.
+     * - `isStopped`: Cancels active crawling tasks and shuts down threads.
+     * - Ongoing tasks are managed using `Future<?>` to allow cancellation.
+     * 
+     * 7. **Execution Flow**:
+     * - User adds URLs to the queue.
+     * - Clicking "Start" begins crawling using multiple threads.
+     * - Each thread:
+     * - Fetches content.
+     * - Extracts the `<title>` tag.
+     * - Updates the UI.
+     * - User can pause, resume, or stop at any time.
+     */
+
     private static Queue<String> urlQueue = new LinkedList<>();
     private static List<String> crawledData = new ArrayList<>();
     private static ExecutorService executorService;
@@ -246,3 +328,14 @@ public class Q6b {
         executorService = Executors.newFixedThreadPool(5); // Create a thread pool with 5 threads
     }
 }
+
+/*
+ * Output:
+ * Crawl stopped.
+ * Added URL: https://www.wikipedia.org/
+ * Added URL: https://www.youtube.com/
+ * 
+ * Starting the crawl...
+ * Crawled: https://www.youtube.com/ | Title: YouTube
+ * Crawled: https://www.wikipedia.org/ | Title: Wikipedia
+ */
