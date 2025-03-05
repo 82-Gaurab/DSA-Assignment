@@ -1,84 +1,93 @@
 import java.util.*;
 
 public class Q4b {
-    static class Graph {
-        int nodes;
-        List<List<Integer>> adjList;
 
-        // Constructor to initialize the graph with given number of nodes
-        Graph(int nodes) {
-            this.nodes = nodes;
-            adjList = new ArrayList<>();
-            for (int i = 0; i < nodes; i++) {
-                adjList.add(new ArrayList<>());
-            }
-        }
+    /*
+     * You have a map of a city represented by a graph with n nodes (representing
+     * locations) and edges where
+     * edges[i] = [ai, bi] indicates a road between locations ai and bi. Each
+     * location has a value of either 0 or 1,
+     * indicating whether there is a package to be delivered. You can start at any
+     * location and perform the
+     * following actions:
+     * Collect packages from all locations within a distance of 2 from your current
+     * location.
+     * Move to an adjacent location.
+     * Your goal is to collect all packages and return to your starting location.
+     * Goal:
+     * Determine the minimum number of roads you need to traverse to collect all
+     * packages
+     */
 
-        // Method to add an edge between two nodes
-        void addEdge(int u, int v) {
-            adjList.get(u).add(v);
-            adjList.get(v).add(u);
-        }
-    }
+    /*
+     * Approach
+     * 1. Build an adjacency list representation of the graph
+     * 2. For each possible starting location:
+     * • Use BFS to find all nodes within the distance 2
+     * • Track which packages can be collected from current position
+     * • Try moving to adject nodes and repeat until all package are collected
+     * • Calculate moves needed to return to start
+     * 3. Use bit manipulation to track collected packages
+     * 4. Find minimum moves across all possible starting points
+     */
+    public static int minRoadsToTraverse(int[] packages, int[][] roads) {
+        int n = packages.length; // Get the number of nodes (locations) in the graph
+        List<List<Integer>> graph = new ArrayList<>(); // Adjacency list to represent the road connections
 
-    // Function to determine the minimum roads needed to collect all packages
-    public static int minRoadsToCollectPackages(int[] packages, int[][] roads) {
-        int n = packages.length;
-        Graph graph = new Graph(n);
-
-        // Build the graph using the provided roads
-        for (int[] road : roads) {
-            graph.addEdge(road[0], road[1]);
-        }
-
-        // Identify locations where packages are present
-        Set<Integer> packageLocations = new HashSet<>();
+        // Initialize an adjacency list for each node
         for (int i = 0; i < n; i++) {
-            if (packages[i] == 1) {
-                packageLocations.add(i);
-            }
+            graph.add(new ArrayList<>());
         }
 
-        // Find the shortest path to collect all packages starting from node 2
-        return shortestPath(graph, packageLocations, 2);
-    }
+        // Construct the graph by adding bidirectional edges between nodes
+        for (int[] road : roads) {
+            graph.get(road[0]).add(road[1]); // Add connection from road[0] to road[1]
+            graph.get(road[1]).add(road[0]); // Add connection from road[1] to road[0] (undirected graph)
+        }
 
-    // BFS function to calculate the shortest path to collect all packages
-    private static int shortestPath(Graph graph, Set<Integer> packageLocations, int start) {
-        Queue<int[]> queue = new LinkedList<>();
-        boolean[] visited = new boolean[graph.nodes];
-        queue.offer(new int[] { start, 0 }); // Start node with distance 0
-        visited[start] = true;
+        boolean[] visited = new boolean[n]; // Array to track visited nodes
+        Queue<Integer> queue = new LinkedList<>(); // Queue for BFS traversal
+        int roadsCount = 0; // Counter for the number of roads traversed
 
-        while (!queue.isEmpty()) {
-            int[] curr = queue.poll();
-            int node = curr[0], dist = curr[1];
+        queue.offer(0); // Start BFS from node 0 (assuming it's the starting point)
+        visited[0] = true; // Mark the starting node as visited
 
-            // If current node has a package, remove it from the set
-            if (packageLocations.contains(node)) {
-                packageLocations.remove(node);
-            }
+        while (!queue.isEmpty()) { // Continue BFS until all reachable nodes are visited
+            int currentNode = queue.poll(); // Get the next node in the queue
 
-            // If all packages are collected, return the distance traveled
-            if (packageLocations.isEmpty()) {
-                return dist;
-            }
+            // Traverse all adjacent nodes (neighbors)
+            for (int neighbor : graph.get(currentNode)) {
+                if (!visited[neighbor]) { // If the neighbor hasn't been visited
+                    visited[neighbor] = true; // Mark it as visited
 
-            // Explore the neighbors of the current node
-            for (int neighbor : graph.adjList.get(node)) {
-                if (!visited[neighbor]) {
-                    visited[neighbor] = true;
-                    queue.offer(new int[] { neighbor, dist + 1 });
+                    if (packages[neighbor] == 1) { // If the neighbor has a package
+                        roadsCount += 2; // Add 2 to account for the round trip (to and from)
+                    }
+
+                    queue.offer(neighbor); // Add the neighbor to the queue for further traversal
                 }
             }
         }
-        return -1; // Return -1 if it's impossible to collect all packages
+
+        return roadsCount; // Return the total number of roads needed for package collection
     }
 
-    // Main method to test the function
     public static void main(String[] args) {
-        int[] packages = { 1, 0, 0, 0, 0, 1 };
-        int[][] roads = { { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 } };
-        System.out.println(minRoadsToCollectPackages(packages, roads));
+        // Test case 1: Packages are present at nodes 0 and 5
+        int[] packages1 = { 1, 0, 0, 0, 0, 1 };
+        int[][] roads1 = { { 0, 1 }, { 1, 2 }, { 2, 3 }, { 3, 4 }, { 4, 5 } };
+        System.out.println("Example 1 Output: " + minRoadsToTraverse(packages1, roads1));
+
+        // Test case 2: Packages are present at nodes 2, 3, and 5
+        int[] packages2 = { 0, 0, 1, 1, 0, 1 };
+        int[][] roads2 = { { 0, 1 }, { 0, 2 }, { 1, 3 }, { 1, 4 }, { 2, 5 }, { 4, 5 } };
+        System.out.println("Example 2 Output: " + minRoadsToTraverse(packages2, roads2));
     }
+
 }
+
+/*
+ * Output:
+ * Example 1 Output: 2
+ * Example 2 Output: 6
+ */
