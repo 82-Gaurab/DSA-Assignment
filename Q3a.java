@@ -1,6 +1,35 @@
 import java.util.*;
 
 public class Q3a {
+    /*
+     * You have a network of n devices. Each device can have its own communication
+     * module installed at a
+     * cost of modules [i - 1]. Alternatively, devices can communicate with each
+     * other using direct connections.
+     * The cost of connecting two devices is given by the array connections where
+     * each connections[j] =
+     * [device1j, device2j, costj] represents the cost to connect devices device1j
+     * and device2j. Connections are
+     * bidirectional, and there could be multiple valid connections between the same
+     * two devices with different
+     * costs.
+     * Goal:
+     * Determine the minimum total cost to connect all devices in the network.
+     */
+
+    /*
+     * Approach
+     * This is a variation of the Minimum Spanning Tree (MST) problem, but with an
+     * added complexity where each device can either have a communication module
+     * installed, or devices can be connected directly through the given
+     * connections.
+     * We will use Kruskal’s algorithm or Prim's algorithm to find the Minimum
+     * Spanning Tree, but with a twist: before applying MST logic, we treat the cost
+     * of installing a communication module as an edge from the device to a
+     * "super node" (representing the network), allowing us to consider module
+     * installation in addition to device-to-device connections.
+     */
+
     // Union-Find (Disjoint Set Union) data structure
     static class UnionFind {
         int[] parent;
@@ -91,6 +120,7 @@ public class Q3a {
         int n = 3;
         int[] modules = { 1, 2, 2 };
         int[][] connections = { { 1, 2, 1 }, { 2, 3, 1 } };
-        System.out.println(minCostToConnectDevices(n, modules, connections)); // Output: 3
+        System.out.println(minCostToConnectDevices(n, modules, connections));
     }
 }
+// Output: 3
