@@ -1,73 +1,79 @@
 public class Q1a {
 
     /**
-     * You are given k identical eggs and you have access to a building with n
-     * floors labeled from 1 to n.
-     *
-     * You know that there exists a floor f where 0 <= f <= n such that any egg
-     * dropped at a floor higher than f will break, and any egg dropped at or below
-     * floor f will not break.
-     *
-     * Each move, you may choose a floor x with 1 <= x <= n and drop an egg.
-     *
-     * If the egg breaks, you know that f < x.
-     * If the egg does not break, you know that f >= x.
-     *
-     * Return the minimum number of moves that you need to know with certainty what
-     * the value of f is.
-     *
-     *
-     *
-     * Example 1:
-     *
-     * Input: k = 1, n = 2
-     * Output: 2
-     * Explanation:
-     * Drop the egg from floor 1.
-     * If the egg breaks, we know that f = 0.
-     * If the egg does not break, drop the egg from floor 2.
-     * If the egg breaks, we know that f = 1.
-     * If the egg does not break, we know that f = 2.
-     * Hence, we need 2 moves in the worst case to know what the value of f is.
-     * Example 2:
-     *
-     * Input: k = 2, n = 6
-     * Output: 3
-     * Example 3:
-     *
-     * Input: k = 3, n = 14
-     * Output: 4
-     *
-     *
-     * Constraints:
-     *
-     * 1 <= k <= 100
-     * 1 <= n <= 104
+     * You have a material with n temperature levels. You know that there exists a
+     * critical temperature f where
+     * 0 <= f <= n such that the material will react or change its properties at
+     * temperatures higher than f but
+     * remain unchanged at or below f.
+     * Rules:
+     *  You can measure the material's properties at any temperature level once.
+     *  If the material reacts or changes its properties, you can no longer use it
+     * for further measurements.
+     *  If the material remains unchanged, you can reuse it for further
+     * measurements.
+     * Goal:
+     * Determine the minimum number of measurements required to find the critical
+     * temperature
+     */
+
+    /*
+     * Approach
+     * We use an optimized search strategy rather than a brute-force approach.
+     * Instead of testing linearly, we balance tests across multiple samples to
+     * minimize the worst-case number of tests.
+     * 1) Define m = 0 (This represents the number of tests conducted.)
+     * 2) Use a formula to decide the next test level:
+     * Max Levels Covered=Tests with one less sample+Previous test range+1
+     * 3) Stop when the covered levels ≥ n.
      */
     public int minMeasurements(int k, int n) {
+
+        // A DP table where dp[k][n] represents the minimum number of measurements
+        // required with k samples and n temperature levels.
         int[][] dp = new int[n + 1][k + 1];
-        int m = 0;
+
+        int m = 0; // The minimum number of moves required
+
+        // Loop until the maximum temperature that can be checked with 'm' samples
+        // and 'k' temperature is at least 'n'
         while (dp[m][k] < n) {
-            m++;
+
+            m++; // Increment the move count
+
+            // Iterate over the number of samples available
             for (int i = 1; i <= k; i++) {
+
+                // The recurrence relation:
+                // dp[m][i] = dp[m-1][i-1] + dp[m-1][i] + 1
+                // - If the sample react (we lose a sample), we check dp[m-1][i-1]
+                // - If the sample does not react, we check dp[m-1][i]
+                // - The '+1' accounts for the current attempt
                 dp[m][i] = dp[m - 1][i - 1] + dp[m - 1][i] + 1;
             }
         }
-        return m;
+        return m; // Return the minimum moves required
     }
 
     public static void main(String[] args) {
-        Q1a solution = new Q1a();
+        Q1a solution = new Q1a(); // Create an instance of the Q1a class
+
+        // Test case 1: 1 sample, 2 temperature levels
         int k1 = 1, n1 = 2;
-        System.out.println("Minimum measurements for k=" + k1 + ", n=" + n1 + ": " + solution.minMeasurements(k1, n1)); // Output:
-                                                                                                                        // 2
+        System.out.println("Minimum measurements for k=" + k1 + ", n=" + n1 + ": " + solution.minMeasurements(k1, n1));
 
+        // Test case 2: 2 samples, 6 temperature levels
         int k2 = 2, n2 = 6;
-        System.out.println("Minimum measurements for k=" + k2 + ", n=" + n2 + ": " + solution.minMeasurements(k2, n2)); // Output:
-                                                                                                                        // 3
+        System.out.println("Minimum measurements for k=" + k2 + ", n=" + n2 + ": " + solution.minMeasurements(k2, n2));
 
+        // Test case 3: 3 samples, 14 temperature levels
         int k3 = 3, n3 = 14;
-        System.out.println("Minimum measurements for k=" + k3 + ", n=" + n3 + ": " + solution.minMeasurements(k3, n3)); // Output:
-                                                                                                                        // 4
+        System.out.println("Minimum measurements for k=" + k3 + ", n=" + n3 + ": " + solution.minMeasurements(k3, n3));
+
     }
 }
+
+// Output
+// Minimum measurements for k=1, n=2: 2
+// Minimum measurements for k=2, n=6: 3
+// Minimum measurements for k=3, n=14: 4
