@@ -7,6 +7,60 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Random;
 
+/*A Game of Tetris
+Functionality:
+Queue: Use a queue to store the sequence of falling blocks.
+Stack: Use a stack to represent the current state of the game board.
+GUI:
+A game board with grid cells.
+A preview area to show the next block.
+Buttons for left, right, and rotate. */
+
+/*
+ * Approach
+ * 
+ * Step 1: Define the Game Board Using a Stack  
+ * - The game board is represented as a 2D grid of colors.  
+ * - A stack is used to store the blocks placed on the board, allowing us to track the game state.  
+ * - Rows are checked and cleared when fully filled.  
+ * 
+ * Step 2: Manage Falling Blocks Using a Queue  
+ * - A queue is used to manage the sequence of falling blocks.  
+ * - New blocks are generated randomly and added to the queue.  
+ * - The next block is fetched from the queue when the current block is placed.  
+ * 
+ * Step 3: Implement Block Movements and Rotations  
+ * - The program allows movement (left, right, down) and rotation of blocks.  
+ * - Movement is validated to prevent blocks from exceeding boundaries or overlapping.  
+ * - Rotations are checked for validity before being applied.  
+ * 
+ * Step 4: Detect and Clear Completed Rows  
+ * - Each time a block is placed, the board is checked for completed rows.  
+ * - Completed rows are removed, and rows above them shift downward.  
+ * - The score is updated based on the number of rows cleared.  
+ * 
+ * Step 5: Implement Game Over Condition  
+ * - If a new block cannot be placed at the top, the game ends.  
+ * - A game-over message is displayed when this happens.  
+ * 
+ * Step 6: Design the GUI Using Java Swing  
+ * - The game board is displayed as a grid using `JPanel`.  
+ * - Blocks are drawn in their respective positions with colors.  
+ * - A sidebar displays score, level, and time.  
+ * - A timer controls the block descent speed, which increases with higher levels.  
+ * 
+ * Step 7: Implement User Input for Controls  
+ * - Left arrow: Move block left.  
+ * - Right arrow: Move block right.  
+ * - Up arrow: Rotate block.  
+ * - Blocks move down automatically at set intervals.  
+ * 
+ * Step 8: Implement Score and Level System  
+ * - The score increases when rows are cleared.  
+ * - The level increases as the score reaches certain thresholds.  
+ * - The game speed increases with the level.  
+ */
+
 class GameBoard {
     private int width, height;
     private Color[][] grid;
