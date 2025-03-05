@@ -1,6 +1,36 @@
 import java.util.*;
 
 public class Q4a {
+
+    /*
+     * Design a Java program that identifies the top 3 trending hashtags from a set
+     * of tweets. Each tweet may contain multiple hashtags. The program should count
+     * the occurrences of each hashtag and display the top 3 hashtags in descending
+     * order of frequency. If multiple hashtags have the same count, they should be
+     * sorted alphabetically.
+     */
+
+    /*
+     * Approach
+     * Extract Hashtags from Tweets
+     * 
+     * Iterate through the tweets 2D array.
+     * Identify the column containing hashtags (index 2).
+     * Split the content into words and extract words starting with #.
+     * Count Hashtag Frequency
+     * 
+     * Use a HashMap<String, Integer> to store each hashtag and its occurrence
+     * count.
+     * Sort and Select Top 3 Hashtags
+     * 
+     * Convert the HashMap entries into a list.
+     * Sort the list first by frequency (descending order).
+     * If multiple hashtags have the same frequency, sort them alphabetically.
+     * Extract the top 3 hashtags.
+     * Display Results in Table Format
+     * 
+     * Use formatted output to display the results in a structured table.
+     */
     public static List<String[]> countTopHashtags(String[][] tweets) {
         // Create a HashMap to store hashtags and their counts
         Map<String, Integer> hashtagCount = new HashMap<>();
@@ -70,8 +100,24 @@ public class Q4a {
 
         // Print the top 3 hashtags
         System.out.println("Top 3 Hashtags:");
+
+        System.out.println("+----------------+---------+");
+        System.out.println("|   Hashtag      | Count   |");
+        System.out.println("+----------------+---------+");
         for (String[] hashtag : top3) {
-            System.out.println(hashtag[0] + " = " + hashtag[1]);
+            System.out.printf("| %-14s | %-7s |\n", hashtag[0], hashtag[1]);
         }
+
+        System.out.println("+----------------+---------+");
     }
 }
+
+// Output:
+// Top 3 Hashtags:
+// +----------------+---------+
+// | Hashtag | Count |
+// +----------------+---------+
+// | #HappyDay | 3 |
+// | #TechLife | 2 |
+// | #ProductiveDay | 1 |
+// +----------------+---------+
