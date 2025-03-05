@@ -4,6 +4,61 @@ import java.util.*;
 import java.util.List;
 
 class Q5 extends JFrame {
+
+    /*
+     * Suppose you are hired as software developer for certain organization and you
+     * are tasked with creating a
+     * GUI application that helps network administrators design a network topology
+     * that is both cost-effective
+     * and efficient for data transmission. The application needs to visually
+     * represent servers and clients as
+     * nodes in a graph, with potential network connections between them, each
+     * having associated costs and
+     * bandwidths. The goal is to enable the user to find a network topology that
+     * minimizes both the total cost
+     * and the latency of data transmission.
+     */
+
+    /*
+     * Approach:
+     * Step 1: Initialize GUI Components
+     * - Create a JFrame with JTextFields for input, JTextArea for output, and
+     * JButtons for user actions.
+     * - Implement a JPanel (GraphPanel) to visualize the network topology.
+     * 
+     * Step 2: Implement Graph Data Structure
+     * - Use an adjacency list (HashMap<String, List<Edge>>) to store nodes and
+     * connections.
+     * - Define an Edge class to represent connections with cost and bandwidth.
+     * 
+     * Step 3: Add Network Connections
+     * - When a user inputs two nodes with cost and bandwidth, store them in the
+     * adjacency list.
+     * - Update the graphical representation by repainting GraphPanel.
+     * 
+     * Step 4: Optimize Network (Minimum Spanning Tree - MST)
+     * - Use Kruskal’s Algorithm with a Union-Find data structure to find the MST.
+     * - Sort edges by cost and iteratively add edges while ensuring no cycles.
+     * 
+     * Step 5: Find Shortest Path
+     * - Use Dijkstra’s Algorithm with a priority queue to find the shortest path.
+     * - Track distances from the start node to all other nodes.
+     * 
+     * Step 6: Draw Network Topology
+     * - Assign positions to nodes and use Graphics to draw circles (nodes) and
+     * lines (edges).
+     * - Display edge costs at their midpoints.
+     * 
+     * Step 7: Handle User Interaction
+     * - On "Add Connection" click: Update adjacency list and repaint the graph.
+     * - On "Optimize Network" click: Compute MST and display results.
+     * - On "Find Shortest Path" click: Execute Dijkstra’s Algorithm and display the
+     * shortest path.
+     * 
+     * Step 8: Run the Program
+     * - Use SwingUtilities.invokeLater to launch the GUI.
+     */
+
     private Graph graph;
     private JTextArea outputArea;
     private JTextField nodeField1, nodeField2, costField, bandwidthField;
